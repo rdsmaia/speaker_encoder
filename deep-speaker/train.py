@@ -5,7 +5,7 @@ from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping, ModelCh
 from tensorflow.keras.optimizers import SGD
 from tqdm import tqdm
 
-from batcher_new import KerasFormatConverter, LazyTripletBatcher
+from batcher import KerasFormatConverter, LazyTripletBatcher
 from constants import BATCH_SIZE, CHECKPOINTS_SOFTMAX_DIR, CHECKPOINTS_TRIPLET_DIR, NUM_FRAMES, NUM_FBANKS
 from conv_models import DeepSpeakerModel
 from triplet_loss import deep_speaker_loss
@@ -104,7 +104,6 @@ def start_training(working_dir, pre_training_phase=True):
         logger.info('Training with the triplet loss.')
         dsm = DeepSpeakerModel(batch_input_shape, include_softmax=False)
         dsm.m.summary()
-        #pause()
         triplet_checkpoint = load_best_checkpoint(CHECKPOINTS_TRIPLET_DIR)
         pre_training_checkpoint = load_best_checkpoint(CHECKPOINTS_SOFTMAX_DIR)
         if triplet_checkpoint is not None:
