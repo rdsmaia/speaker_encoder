@@ -7,7 +7,7 @@ import os
 import click
 
 from audio import Audio
-from batcher_new import KerasFormatConverter
+from batcher import KerasFormatConverter
 from constants import SAMPLE_RATE, NUM_FRAMES
 from test import test
 from train import start_training
