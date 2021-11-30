@@ -11,9 +11,8 @@ import torch
 from torch.utils.data import DataLoader
 from TTS.speaker_encoder.dataset import MyDataset
 from TTS.speaker_encoder.losses import AngleProtoLoss, GE2ELoss
-from TTS.speaker_encoder.model import SpeakerEncoder
 from TTS.speaker_encoder.utils.generic_utils import \
-    check_config_speaker_encoder, save_best_model
+    check_config_speaker_encoder, save_best_model, setup_model
 from TTS.speaker_encoder.utils.visual import plot_embeddings
 from TTS.tts.datasets.preprocess import load_meta_data
 from TTS.utils.audio import AudioProcessor
@@ -40,7 +39,7 @@ def setup_loader(ap: AudioProcessor, is_val: bool=False, verbose: bool=False):
     else:
         dataset = MyDataset(ap,
                             meta_data_eval if is_val else meta_data_train,
-                            voice_len=1.6,
+                            voice_len=1.0,
                             num_utter_per_speaker=c.num_utters_per_speaker,
                             num_speakers_in_batch=c.num_speakers_in_batch,
                             skip_speakers=False,
@@ -143,11 +142,7 @@ def main(args):  # pylint: disable=redefined-outer-name
     global meta_data_eval
 
     ap = AudioProcessor(**c.audio)
-    model = SpeakerEncoder(input_dim=c.model['input_dim'],
-                           proj_dim=c.model['proj_dim'],
-                           lstm_dim=c.model['lstm_dim'],
-                           num_lstm_layers=c.model['num_lstm_layers'],
-                           use_lstm_with_projection=c.model['use_lstm_with_projection'])
+    model = setup_model(c)
     optimizer = RAdam(model.parameters(), lr=c.lr)
 
     if c.loss == "ge2e":
