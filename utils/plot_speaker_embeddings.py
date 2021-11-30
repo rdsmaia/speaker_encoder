@@ -56,13 +56,16 @@ def main():
 
 	print(f'Shape of the 2D embedding: {X.shape}')
 
-	for s, i, c in speakers:
-		if c == 1:
-			colors = 'r'
-		elif c == 0:
-			colors = 'b'
+	for s, i in speakers:
+		if i == 1 or (i >= 3 and i <= 23) or i == 75 or i == 77:
+			colors = 'red'
+		elif i < 78:
+			colors = 'blue'
+		elif i < 140:
+			colors = 'green'
 		else:
-			colors = 'g'
+			colors = 'black'
+
 		if dim == 2:
 			ax.scatter(X[i:i+1, 0], X[i:i+1, 1], color=colors)
 			ax.text(X[i:i+1, 0]+delta, X[i:i+1, 1]+delta, s, fontsize=9)
